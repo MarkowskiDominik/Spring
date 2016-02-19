@@ -3,7 +3,6 @@ package pl.spring.demo.dao;
 import pl.spring.demo.entity.BookEntity;
 
 import java.util.List;
-import java.util.Set;
 
 public interface BookDao {
 
@@ -15,5 +14,4 @@ public interface BookDao {
 
     BookEntity save(BookEntity book);
 
-	Set<BookEntity> getALL_BOOKS();
 }
