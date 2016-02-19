@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import pl.spring.demo.common.Sequence;
 import pl.spring.demo.dao.BookDao;
 import pl.spring.demo.exception.BookNotNullIdException;
-import pl.spring.demo.to.BookTo;
+import pl.spring.demo.entity.BookEntity;
 import pl.spring.demo.to.IdAware;
 
 @Component("bookDaoAdvisor")
@@ -38,13 +38,13 @@ public class BookDaoAdvisor {
 		}
 	}
 
-	@Pointcut("execution(public * pl.spring.demo.dao.BookDao.save(pl.spring.demo.to.BookTo))")
-	public void setIdForSaveBookTo() {
+	@Pointcut("execution(public * pl.spring.demo.dao.BookDao.save(pl.spring.demo.to.BookEntity))")
+	public void setIdForSaveBookEntity() {
 	}
 	
-	@Before("setIdForSaveBookTo()")
+	@Before("setIdForSaveBookEntity()")
 	public void setId(JoinPoint joinPoint) {
-		BookTo book = (BookTo) joinPoint.getArgs()[0];
+		BookEntity book = (BookEntity) joinPoint.getArgs()[0];
         if (book.getId() == null) {
             book.setId(sequence.nextValue(bookDao.getALL_BOOKS()));
         }
