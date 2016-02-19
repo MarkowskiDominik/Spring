@@ -1,41 +1,54 @@
 package pl.spring.demo.to;
 
+import pl.spring.demo.entity.AuthorEntity;
+import pl.spring.demo.entity.BookEntity;
+
 public class BookTo implements IdAware {
-    private Long id;
-    private String title;
-    private String authors;
+	private Long id;
+	private String title;
+	private String authors;
 
-    public BookTo() {
-    }
+	public BookTo() {
+	}
 
-    public BookTo(Long id, String title, String authors) {
-        this.id = id;
-        this.title = title;
-        this.authors = authors;
-    }
+	public BookTo(Long id, String title, String authors) {
+		this.id = id;
+		this.title = title;
+		this.authors = authors;
+	}
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	public BookTo(BookEntity bookEntity) {
+		this.id = bookEntity.getId();
+		this.title = bookEntity.getTitle();
+		this.authors = null;
+		for (AuthorEntity authorEntity : bookEntity.getAuthors()) {
+			this.authors = this.authors + authorEntity.getFirstName() + " " + authorEntity.getLastName() + ", ";
+		}
+		authors = authors.substring(0, authors.length() - 2);
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public String getAuthors() {
-        return authors;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setAuthors(String authors) {
-        this.authors = authors;
-    }
+	public String getAuthors() {
+		return authors;
+	}
+
+	public void setAuthors(String authors) {
+		this.authors = authors;
+	}
 }

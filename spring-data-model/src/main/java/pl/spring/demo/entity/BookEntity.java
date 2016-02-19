@@ -1,7 +1,9 @@
 package pl.spring.demo.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import pl.spring.demo.to.BookTo;
 import pl.spring.demo.to.IdAware;
 
 public class BookEntity implements IdAware {
@@ -18,7 +20,16 @@ public class BookEntity implements IdAware {
         this.authors = authors;
     }
 
-    @Override
+    public BookEntity(BookTo bookTo) {
+    	this.id = bookTo.getId();
+    	this.title = bookTo.getTitle();
+    	authors = new ArrayList<AuthorEntity>();
+    	for (String authorTo : bookTo.getAuthors().split(",")) {
+			authors.add(new AuthorEntity(1l, authorTo.split(" ")[0], authorTo.split(" ")[1]));
+		}
+    }
+
+	@Override
     public Long getId() {
         return id;
     }
