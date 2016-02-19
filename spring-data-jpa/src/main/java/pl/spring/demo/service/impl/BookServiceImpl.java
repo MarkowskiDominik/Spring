@@ -10,6 +10,7 @@ import pl.spring.demo.service.BookService;
 import pl.spring.demo.to.BookTo;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("bookService")
 public class BookServiceImpl implements BookService {
@@ -23,22 +24,36 @@ public class BookServiceImpl implements BookService {
 	@Override
 	@Cacheable("booksCache")
 	public List<BookTo> findAllBooks() {
-		return bookMapper.mappBookEntityToBookTo(bookDao.findAll());
+		return bookDao.findAll()
+				.stream()
+				.map(bookEntity->bookMapper.mappBookEntityToBookTo(bookEntity))
+				.collect(Collectors.toList());
+//		return bookMapper.mappBookEntityToBookTo(bookDao.findAll());
 	}
 
 	@Override
 	public List<BookTo> findBooksByTitle(String title) {
-		return bookMapper.mappBookEntityToBookTo(bookDao.findBookByTitle(title));
+		return bookDao.findBookByTitle(title)
+				.stream()
+				.map(bookEntity->bookMapper.mappBookEntityToBookTo(bookEntity))
+				.collect(Collectors.toList());
+//		return bookMapper.mappBookEntityToBookTo(bookDao.findBookByTitle(title));
 	}
 
 	@Override
 	public List<BookTo> findBooksByAuthor(String author) {
-		return bookMapper.mappBookEntityToBookTo(bookDao.findBooksByAuthor(author));
+		return bookDao.findBooksByAuthor(author)
+				.stream()
+				.map(bookEntity->bookMapper.mappBookEntityToBookTo(bookEntity))
+				.collect(Collectors.toList());
+//		return bookMapper.mappBookEntityToBookTo(bookDao.findBooksByAuthor(author));
 	}
 
 	@Override
-	public BookTo saveBook(BookTo book) {
-		return bookMapper.mappBookEntityToBookTo(bookDao.save(bookMapper.mappBookToToBookEntity(book)));
+	public BookTo saveBook(BookTo bookTo) {
+		bookDao.save(bookMapper.mappBookToToBookEntity(bookTo));
+		return bookTo;
+//		return bookMapper.mappBookEntityToBookTo(bookDao.save(bookMapper.mappBookToToBookEntity(book)));
 	}
 
 	public void setBookDao(BookDao bookDao) {

@@ -1,8 +1,5 @@
 package pl.spring.demo.to;
 
-import pl.spring.demo.entity.AuthorEntity;
-import pl.spring.demo.entity.BookEntity;
-
 public class BookTo implements IdAware {
 	private Long id;
 	private String title;
@@ -15,16 +12,6 @@ public class BookTo implements IdAware {
 		this.id = id;
 		this.title = title;
 		this.authors = authors;
-	}
-
-	public BookTo(BookEntity bookEntity) {
-		this.id = bookEntity.getId();
-		this.title = bookEntity.getTitle();
-		this.authors = null;
-		for (AuthorEntity authorEntity : bookEntity.getAuthors()) {
-			this.authors = this.authors + authorEntity.getFirstName() + " " + authorEntity.getLastName() + ", ";
-		}
-		authors = authors.substring(0, authors.length() - 2);
 	}
 
 	@Override
