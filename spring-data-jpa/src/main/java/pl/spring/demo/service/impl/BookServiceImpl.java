@@ -5,6 +5,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import pl.spring.demo.dao.BookDao;
+import pl.spring.demo.mapper.BookMapper;
 import pl.spring.demo.service.BookService;
 import pl.spring.demo.to.BookTo;
 
@@ -14,30 +15,33 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
 
 	@Autowired
-    private BookDao bookDao;
+	private BookDao bookDao;
 
-    @Override
-    @Cacheable("booksCache")
-    public List<BookTo> findAllBooks() {
-        return bookDao.findAll();
-    }
+	@Autowired
+	private BookMapper bookMapper;
 
-    @Override
-    public List<BookTo> findBooksByTitle(String title) {
-        return bookDao.findBookByTitle(title);
-    }
+	@Override
+	@Cacheable("booksCache")
+	public List<BookTo> findAllBooks() {
+		return bookMapper.mappBookEntityToBookTo(bookDao.findAll());
+	}
 
-    @Override
-    public List<BookTo> findBooksByAuthor(String author) {
-        return bookDao.findBooksByAuthor(author);
-    }
+	@Override
+	public List<BookTo> findBooksByTitle(String title) {
+		return bookMapper.mappBookEntityToBookTo(bookDao.findBookByTitle(title));
+	}
 
-    @Override
-    public BookTo saveBook(BookTo book) {
-        return bookDao.save(book);
-    }
+	@Override
+	public List<BookTo> findBooksByAuthor(String author) {
+		return bookMapper.mappBookEntityToBookTo(bookDao.findBooksByAuthor(author));
+	}
 
-    public void setBookDao(BookDao bookDao) {
-        this.bookDao = bookDao;
-    }
+	@Override
+	public BookTo saveBook(BookTo book) {
+		return bookMapper.mappBookEntityToBookTo(bookDao.save(bookMapper.mappBookToToBookEntity(book)));
+	}
+
+	public void setBookDao(BookDao bookDao) {
+		this.bookDao = bookDao;
+	}
 }
