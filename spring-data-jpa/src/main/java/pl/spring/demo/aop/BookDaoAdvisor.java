@@ -4,17 +4,28 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import pl.spring.demo.common.Sequence;
+import pl.spring.demo.dao.BookDao;
 import pl.spring.demo.exception.BookNotNullIdException;
+import pl.spring.demo.to.BookTo;
 import pl.spring.demo.to.IdAware;
 
 @Component("bookDaoAdvisor")
 @Aspect()
 public class BookDaoAdvisor {
 
+	@Autowired
+	private Sequence sequence;
+	
+	@Autowired
+	private BookDao bookDao;
+	
 	@Pointcut("@annotation(pl.spring.demo.annotation.NullableId)")
-	public void pointCutForNullableId() {};
+	public void pointCutForNullableId() {
+	};
 
 	@Before("pointCutForNullableId()")
 	public void beforeCheckNotNullId(JoinPoint joinPoint) {
@@ -25,5 +36,17 @@ public class BookDaoAdvisor {
 		if (o instanceof IdAware && ((IdAware) o).getId() != null) {
 			throw new BookNotNullIdException();
 		}
+	}
+
+	@Pointcut("execution(public * pl.spring.demo.dao.BookDao.save(pl.spring.demo.to.BookTo))")
+	public void setIdForSaveBookTo() {
+	}
+	
+	@Before("setIdForSaveBookTo()")
+	public void setId(JoinPoint joinPoint) {
+		BookTo book = (BookTo) joinPoint.getArgs()[0];
+        if (book.getId() == null) {
+            book.setId(sequence.nextValue(bookDao.getALL_BOOKS()));
+        }
 	}
 }
