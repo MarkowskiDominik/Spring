@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import pl.spring.demo.dao.BookDao;
 import pl.spring.demo.dao.impl.BookDaoImpl;
 import pl.spring.demo.exception.BookNotNullIdException;
 import pl.spring.demo.entity.BookEntity;
@@ -17,7 +18,7 @@ import pl.spring.demo.to.IdAware;
 public class BookDaoAdvisor {
 
 	@Autowired
-	private BookDaoImpl bookDaoImpl;
+	private BookDao bookDao;
 	
 	@Pointcut("@annotation(pl.spring.demo.annotation.NullableId)")
 	public void pointCutForNullableId() {
@@ -34,7 +35,7 @@ public class BookDaoAdvisor {
 		}
 	}
 
-	@Pointcut("execution(public * pl.spring.demo.dao.BookDao.save(pl.spring.demo.to.BookEntity))")
+	@Pointcut("execution(public * pl.spring.demo.dao.BookDao.save(pl.spring.demo.entity.BookEntity))")
 	public void setIdForSaveBookEntity() {
 	}
 	
@@ -42,7 +43,7 @@ public class BookDaoAdvisor {
 	public void setId(JoinPoint joinPoint) {
 		BookEntity book = (BookEntity) joinPoint.getArgs()[0];
         if (book.getId() == null) {
-            book.setId(bookDaoImpl.getNextBookId());
+            book.setId(((BookDaoImpl)bookDao).getNextBookId());
         }
 	}
 }
