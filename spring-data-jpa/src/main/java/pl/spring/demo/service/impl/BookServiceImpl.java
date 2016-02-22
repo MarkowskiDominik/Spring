@@ -26,7 +26,7 @@ public class BookServiceImpl implements BookService {
 	public List<BookTo> findAllBooks() {
 		return bookDao.findAll()
 				.stream()
-				.map(bookEntity->bookMapper.mappBookEntityToBookTo(bookEntity))
+				.map(bookEntity->bookMapper.bookEntityToBookTo(bookEntity))
 				.collect(Collectors.toList());
 	}
 
@@ -34,7 +34,7 @@ public class BookServiceImpl implements BookService {
 	public List<BookTo> findBooksByTitle(String title) {
 		return bookDao.findBookByTitle(title)
 				.stream()
-				.map(bookEntity->bookMapper.mappBookEntityToBookTo(bookEntity))
+				.map(bookEntity->bookMapper.bookEntityToBookTo(bookEntity))
 				.collect(Collectors.toList());
 	}
 
@@ -42,14 +42,13 @@ public class BookServiceImpl implements BookService {
 	public List<BookTo> findBooksByAuthor(String author) {
 		return bookDao.findBooksByAuthor(author)
 				.stream()
-				.map(bookEntity->bookMapper.mappBookEntityToBookTo(bookEntity))
+				.map(bookEntity->bookMapper.bookEntityToBookTo(bookEntity))
 				.collect(Collectors.toList());
 	}
 
 	@Override
 	public BookTo saveBook(BookTo bookTo) {
-		bookDao.save(bookMapper.mappBookToToBookEntity(bookTo));
-		return bookTo;
+		return bookMapper.bookEntityToBookTo(bookDao.save(bookMapper.bookToToBookEntity(bookTo)));
 	}
 
 	public void setBookDao(BookDao bookDao) {

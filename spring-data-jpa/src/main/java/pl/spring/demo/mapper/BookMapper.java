@@ -5,7 +5,7 @@ import pl.spring.demo.to.BookTo;
 
 public interface BookMapper {
 
-	BookTo mappBookEntityToBookTo(BookEntity bookEntity);
+	BookTo bookEntityToBookTo(BookEntity bookEntity);
 	
-	BookEntity mappBookToToBookEntity(BookTo bookTo);
+	BookEntity bookToToBookEntity(BookTo bookTo);
 }

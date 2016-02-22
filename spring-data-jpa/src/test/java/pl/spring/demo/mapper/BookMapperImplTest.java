@@ -22,24 +22,36 @@ public class BookMapperImplTest {
 	private BookMapper bookMapper;
 
 	@Test
-	public void testShouldConvertBookEntityToBookTo() {
+	public void testShouldConvertBookToToBookEntity() {
 		// given
 		BookTo bookTo = new BookTo(1L, "title", "new author");
 		// when
-		BookEntity bookEntity = bookMapper.mappBookToToBookEntity(bookTo);
+		BookEntity bookEntity = bookMapper.bookToToBookEntity(bookTo);
 		// then
 		assertEquals(bookTo.getId(), bookEntity.getId());
 		assertEquals(bookTo.getTitle(), bookEntity.getTitle());
 	}
 
 	@Test
-	public void testShouldConvertBookToToBookEntity() {
+	public void testShouldConvertBookEntityToBookTo() {
 		// given
 		BookEntity bookEntity = new BookEntity(1L, "title", Arrays.asList(new AuthorEntity(1L, "new", "author")));
 		// when
-		BookTo bookTo = bookMapper.mappBookEntityToBookTo(bookEntity);
+		BookTo bookTo = bookMapper.bookEntityToBookTo(bookEntity);
 		// then
 		assertEquals(bookEntity.getId(), bookTo.getId());
 		assertEquals(bookEntity.getTitle(), bookTo.getTitle());
+	}
+	
+	@Test
+	public void testShouldConvertBookEntityToBookToToBookEntity() {
+		// given
+		BookEntity bookEntity = new BookEntity(1L, "title", Arrays.asList(new AuthorEntity(1L, "new", "author")));
+		// when
+		BookEntity resultBookEntity = bookMapper.bookToToBookEntity(bookMapper.bookEntityToBookTo(bookEntity));
+		// then
+		assertEquals(bookEntity.getId(), resultBookEntity.getId());
+		assertEquals(bookEntity.getTitle(), resultBookEntity.getTitle());
+		assertEquals(bookEntity.getClass(), resultBookEntity.getClass());
 	}
 }

@@ -17,7 +17,8 @@ public class BookMapperImpl implements BookMapper {
 	private static final String SPLIT_FIRSTNAME_LASTNAME = " ";
 
 	@Override
-	public BookTo mappBookEntityToBookTo(BookEntity bookEntity) {
+	public BookTo bookEntityToBookTo(BookEntity bookEntity) {
+		System.out.println("EntityTo");
 		String authors = null;
 		for (AuthorEntity authorEntity : bookEntity.getAuthors()) {
 			authors = authors + authorEntity.getFirstName() + SPLIT_FIRSTNAME_LASTNAME + authorEntity.getLastName()
@@ -27,7 +28,8 @@ public class BookMapperImpl implements BookMapper {
 	}
 
 	@Override
-	public BookEntity mappBookToToBookEntity(BookTo bookTo) {
+	public BookEntity bookToToBookEntity(BookTo bookTo) {
+		System.out.println("ToEntity");
 		List<AuthorEntity> authors = new ArrayList<AuthorEntity>();
 		if (bookTo.getAuthors() != null) {
 			for (String authorTo : bookTo.getAuthors().split(SPLIT_AUTHOR)) {
