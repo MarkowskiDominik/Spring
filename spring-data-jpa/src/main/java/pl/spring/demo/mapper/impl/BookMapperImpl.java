@@ -12,45 +12,30 @@ import pl.spring.demo.to.BookTo;
 
 @Service("bookMapper")
 public class BookMapperImpl implements BookMapper {
-	
+
+	private static final String SPLIT_AUTHOR = ",";
+	private static final String SPLIT_FIRSTNAME_LASTNAME = " ";
+
 	@Override
 	public BookTo mappBookEntityToBookTo(BookEntity bookEntity) {
-		Long id = bookEntity.getId();
-		String title = bookEntity.getTitle();
 		String authors = null;
 		for (AuthorEntity authorEntity : bookEntity.getAuthors()) {
-			authors = authors + authorEntity.getFirstName() + " " + authorEntity.getLastName() + ", ";
+			authors = authors + authorEntity.getFirstName() + SPLIT_FIRSTNAME_LASTNAME + authorEntity.getLastName()
+					+ SPLIT_AUTHOR;
 		}
-		return new BookTo(id, title, authors.substring(0, authors.length()-2));
+		return new BookTo(bookEntity.getId(), bookEntity.getTitle(), authors.substring(0, authors.length() - 1));
 	}
-
-//	@Override
-//	public List<BookTo> mappBookEntityToBookTo(List<BookEntity> bookEntities) {
-//		List<BookTo> bookTos = new ArrayList<BookTo>();
-//		for (BookEntity bookEntity : bookEntities) {
-//			bookTos.add(mappBookEntityToBookTo(bookEntity));
-//		}
-//		return bookTos;
-//	}
 
 	@Override
 	public BookEntity mappBookToToBookEntity(BookTo bookTo) {
-		Long id = bookTo.getId();
-    	String title = bookTo.getTitle();
-    	List<AuthorEntity> authors = new ArrayList<AuthorEntity>();
-		System.out.println("");
-    	for (String authorTo : bookTo.getAuthors().split(",")) {
-			authors.add(new AuthorEntity(1l, authorTo.split(" ")[0], authorTo.split(" ")[1]));
+		List<AuthorEntity> authors = new ArrayList<AuthorEntity>();
+		if (bookTo.getAuthors() != null) {
+			for (String authorTo : bookTo.getAuthors().split(SPLIT_AUTHOR)) {
+				authors.add(new AuthorEntity(1l, authorTo.split(SPLIT_FIRSTNAME_LASTNAME)[0].trim(),
+						authorTo.split(SPLIT_FIRSTNAME_LASTNAME)[1].trim()));
+			}
 		}
-		return new BookEntity(id, title, authors);
+		return new BookEntity(bookTo.getId(), bookTo.getTitle(), authors);
 	}
 
-//	@Override
-//	public List<BookEntity> mappBookToToBookEntity(List<BookTo> bookTos) {
-//		List<BookEntity> bookEntities = new ArrayList<BookEntity>();
-//		for (BookTo bookTo : bookTos) {
-//			bookEntities.add(mappBookToToBookEntity(bookTo));
-//		}
-//		return bookEntities;
-//	}
 }
