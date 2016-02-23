@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,12 +35,18 @@ public class BookDaoImpl implements BookDao {
 
 	@Override
 	public List<BookEntity> findBookByTitle(String title) {
-		return null;
+		return ALL_BOOKS.stream()
+				.filter(bookEntity -> bookEntity.getTitle().toLowerCase().contains(title.toLowerCase()))
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public List<BookEntity> findBooksByAuthor(String author) {
-		return null;
+		return ALL_BOOKS.stream()
+				.filter(bookEntity -> bookEntity.getAuthors().stream()
+						.anyMatch(authorEntity -> new String(authorEntity.getFirstName().toLowerCase() + " "
+								+ authorEntity.getLastName().toLowerCase()).contains(author.toLowerCase())))
+				.collect(Collectors.toList());
 	}
 
 	@Override
