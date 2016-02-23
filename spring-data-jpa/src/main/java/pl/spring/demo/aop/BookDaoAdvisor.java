@@ -32,11 +32,11 @@ public class BookDaoAdvisor {
 	}
 
 	@Pointcut("execution(public * pl.spring.demo.dao.BookDao.save(pl.spring.demo.entity.BookEntity))")
-	public void setIdForSaveBookEntity() {
+	public void pointCutForSetIdForSaveBook() {
 	}
 	
-	@Before("setIdForSaveBookEntity()")
-	public void setId(JoinPoint joinPoint) {
+	@Before("pointCutForSetIdForSaveBook()")
+	public void setIdForSaveBook(JoinPoint joinPoint) {
 		BookEntity book = (BookEntity) joinPoint.getArgs()[0];
         if (book.getId() == null) {
             book.setId(bookDao.getNextBookId());

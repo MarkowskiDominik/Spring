@@ -1,6 +1,7 @@
 package pl.spring.demo.launcher;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import pl.spring.demo.service.BookService;
@@ -11,5 +12,6 @@ public class Launcher {
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring/spring-context.xml");
 		BookService bookService = (BookService) context.getBean("bookService");
 		System.out.println(bookService.findAllBooks());
+		((ConfigurableApplicationContext)context).close();
 	}
 }
