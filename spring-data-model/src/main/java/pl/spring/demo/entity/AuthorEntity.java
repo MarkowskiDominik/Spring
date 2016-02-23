@@ -1,6 +1,6 @@
 package pl.spring.demo.entity;
 
-import pl.spring.demo.to.IdAware;
+import pl.spring.demo.idaware.IdAware;
 
 public class AuthorEntity implements IdAware {
     private Long id;

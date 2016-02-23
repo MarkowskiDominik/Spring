@@ -1,10 +1,10 @@
 package pl.spring.demo.common;
 
-import pl.spring.demo.to.IdAware;
-
 import java.util.Collection;
 
 import org.springframework.stereotype.Component;
+
+import pl.spring.demo.idaware.IdAware;
 
 @Component("sequence")
 public class Sequence {

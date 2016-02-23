@@ -8,10 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import pl.spring.demo.dao.BookDao;
-import pl.spring.demo.dao.impl.BookDaoImpl;
 import pl.spring.demo.exception.BookNotNullIdException;
+import pl.spring.demo.idaware.IdAware;
 import pl.spring.demo.entity.BookEntity;
-import pl.spring.demo.to.IdAware;
 
 @Component("bookDaoAdvisor")
 @Aspect()
@@ -22,14 +21,11 @@ public class BookDaoAdvisor {
 	
 	@Pointcut("@annotation(pl.spring.demo.annotation.NullableId)")
 	public void pointCutForNullableId() {
-	};
-
-	@Before("pointCutForNullableId()")
-	public void beforeCheckNotNullId(JoinPoint joinPoint) {
-		checkNotNullId(joinPoint.getArgs()[0]);
 	}
 
-	private void checkNotNullId(Object o) {
+	@Before("pointCutForNullableId()")
+	public void checkNotNullId(JoinPoint joinPoint) {
+		Object o = joinPoint.getArgs()[0];
 		if (o instanceof IdAware && ((IdAware) o).getId() != null) {
 			throw new BookNotNullIdException();
 		}
@@ -43,7 +39,7 @@ public class BookDaoAdvisor {
 	public void setId(JoinPoint joinPoint) {
 		BookEntity book = (BookEntity) joinPoint.getArgs()[0];
         if (book.getId() == null) {
-            book.setId(((BookDaoImpl)bookDao).getNextBookId());
+            book.setId(bookDao.getNextBookId());
         }
 	}
 }

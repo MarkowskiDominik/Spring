@@ -1,4 +1,4 @@
-package pl.spring.demo.to;
+package pl.spring.demo.idaware;
 
 public interface IdAware {
 
