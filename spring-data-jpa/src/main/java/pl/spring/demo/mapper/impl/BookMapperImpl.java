@@ -18,7 +18,6 @@ public class BookMapperImpl implements BookMapper {
 
 	@Override
 	public BookTo bookEntityToBookTo(BookEntity bookEntity) {
-		System.out.println("EntityTo");
 		String authors = null;
 		for (AuthorEntity authorEntity : bookEntity.getAuthors()) {
 			authors = authors + authorEntity.getFirstName() + SPLIT_FIRSTNAME_LASTNAME + authorEntity.getLastName()
@@ -29,7 +28,6 @@ public class BookMapperImpl implements BookMapper {
 
 	@Override
 	public BookEntity bookToToBookEntity(BookTo bookTo) {
-		System.out.println("ToEntity");
 		List<AuthorEntity> authors = new ArrayList<AuthorEntity>();
 		if (bookTo.getAuthors() != null) {
 			for (String authorTo : bookTo.getAuthors().split(SPLIT_AUTHOR)) {
@@ -39,5 +37,4 @@ public class BookMapperImpl implements BookMapper {
 		}
 		return new BookEntity(bookTo.getId(), bookTo.getTitle(), authors);
 	}
-
 }
