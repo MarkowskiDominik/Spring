@@ -3,7 +3,7 @@ package pl.spring.demo.aop;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+//import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,12 +18,8 @@ public class BookDaoAdvisor {
 
 	@Autowired
 	private BookDao bookDao;
-	
-	@Pointcut("@annotation(pl.spring.demo.annotation.NullableId)")
-	public void pointCutForNullableId() {
-	}
 
-	@Before("pointCutForNullableId()")
+	@Before("@annotation(pl.spring.demo.annotation.NullableId)")
 	public void checkNotNullId(JoinPoint joinPoint) {
 		Object o = joinPoint.getArgs()[0];
 		if (o instanceof IdAware && ((IdAware) o).getId() != null) {
@@ -31,15 +27,11 @@ public class BookDaoAdvisor {
 		}
 	}
 
-	@Pointcut("execution(public * pl.spring.demo.dao.BookDao.save(pl.spring.demo.entity.BookEntity))")
-	public void pointCutForSetIdForSaveBook() {
-	}
-	
-	@Before("pointCutForSetIdForSaveBook()")
+	@Before("execution(public * pl.spring.demo.dao.BookDao.save(pl.spring.demo.entity.BookEntity))")
 	public void setIdForSaveBook(JoinPoint joinPoint) {
 		BookEntity book = (BookEntity) joinPoint.getArgs()[0];
-        if (book.getId() == null) {
-            book.setId(bookDao.getNextBookId());
-        }
+		if (book.getId() == null) {
+			book.setId(bookDao.getNextBookId());
+		}
 	}
 }
